@@ -1,26 +1,30 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import NewPost from "components/newPost";
+import Post from "components/post";
+import useStateSelector from "hooks/useStateSelector";
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { getPosts } from "redux/actions/posts";
+import { Posts } from "type";
+import "./styles.css";
+const App = () => {
+  const posts: Posts = useStateSelector((state) => state.posts);
+  const dispatch = useDispatch();
 
-function App() {
+  useEffect(() => {
+    dispatch(getPosts());
+  }, [dispatch]);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <main>
+      <h1>Posts</h1>
+
+      <NewPost />
+
+      {posts.map((post) => (
+        <Post key={post.id} {...post} />
+      ))}
+    </main>
   );
-}
+};
 
 export default App;
